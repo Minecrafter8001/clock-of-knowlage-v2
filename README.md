@@ -31,7 +31,7 @@ front display:
 ![IMG_20251028_153941955](https://github.com/user-attachments/assets/29ca95ea-50e6-4091-9005-27dc5d05cb18)
 rear with wiring:
 ![IMG_20251028_153950273](https://github.com/user-attachments/assets/a1a52a12-4fe7-4d9a-bcfd-3b5f73ceea5f)
-v2 on the right with its namesake on the left (not a brand, my patients bought it 20 years ago and named it that)
+v2 on the right with its namesake on the left (not a brand, my parents bought it 20 years ago and named it that)
 ![IMG_20251028_160213568](https://github.com/user-attachments/assets/26a7bfe2-0278-4893-ad3e-7b4fe969e5b3)
 
 
