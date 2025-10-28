@@ -7,7 +7,7 @@ It keeps accurate time using NTP, shows Wi-Fi connection status, and displays bo
 - Wi-Fi with auto-reconnect and backoff handling  
 - External temperature and humidity fetched from the [Open-Meteo API](https://open-meteo.com/)  
 - Local temperature and humidity from a DHT22 sensor (planned upgrade to a more accurate sensor)  
-- UI made with [lopaka](https://lopaka.app/gallery/16709/35604) and rendered with the [U8g2](https://github.com/olikraus/u8g2) graphics library  
+- UI made with [lopaka](https://lopaka.app) and rendered with the [U8g2](https://github.com/olikraus/u8g2) graphics library  
 - Error handling and retry logic for NTP and weather fetches  
 
 ## Hardware
@@ -16,10 +16,19 @@ It keeps accurate time using NTP, shows Wi-Fi connection status, and displays bo
 - DHT22 sensor (easily swappable for alternatives)  
 - Standard jumpers and breadboards
 
-Approximate costs (as of 2025):  
-- ESP32 board: 3 for ~£18 [Amazon](https://www.amazon.co.uk/dp/B0D8T5XD3P)
-- VFD display: ~£41 [AliExpress](https://www.aliexpress.com/item/1005004465805347.html)
-- DHT22 sensor: ~£3 [Amazon](https://www.amazon.co.uk/dp/B0DP3XJSXR)
+## links
+- ESP32 board: [Amazon](https://www.amazon.co.uk/dp/B0D8T5XD3P)
+- VFD display: [AliExpress](https://www.aliexpress.com/item/1005004465805347.html)
+- DHT22 sensor: [Amazon](https://www.amazon.co.uk/dp/B0DP3XJSXR)
+- UI design: [lopaka](https://lopaka.app/gallery/16709/35604)
 
 ## Issues and bugs
 1. if the wifi accociation fails it waits forever and needs a manual restart
+
+
+## images
+![IMG_20251028_153941955](https://github.com/user-attachments/assets/29ca95ea-50e6-4091-9005-27dc5d05cb18)
+![IMG_20251028_153950273](https://github.com/user-attachments/assets/a1a52a12-4fe7-4d9a-bcfd-3b5f73ceea5f)
+
+
+if anyone has the knowlage or ability to make a 3d model for a case/housing for this project then please contact me, create an issue here or message me on discord at `minecrafter8001` and ill provide some messurements
