@@ -27,8 +27,13 @@ It keeps accurate time using NTP, shows Wi-Fi connection status, and displays bo
 
 
 ## images
+front display:
 ![IMG_20251028_153941955](https://github.com/user-attachments/assets/29ca95ea-50e6-4091-9005-27dc5d05cb18)
+rear with wiring:
 ![IMG_20251028_153950273](https://github.com/user-attachments/assets/a1a52a12-4fe7-4d9a-bcfd-3b5f73ceea5f)
+v2 on the right with its namesake on the left (not a brand, my patients bought it 20 years ago and named it that)
+![IMG_20251028_153950273](https://github.com/user-attachments/assets/96d70f5b-4079-467f-81e4-6eff04242427)
+
 
 
 if anyone has the knowlage or ability to make a 3d model for a case/housing for this project then please contact me, create an issue here or message me on discord at `minecrafter8001` and ill provide some messurements
