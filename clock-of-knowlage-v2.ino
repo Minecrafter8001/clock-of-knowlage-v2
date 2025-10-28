@@ -13,6 +13,12 @@
 #include "time.h"
 #include <WiFiClientSecure.h>
 
+<<<<<<< HEAD
+=======
+// User configuration
+#include "config.h"
+
+>>>>>>> f0e11c5 (Initial commit)
 // ------------------------ Hardware & Pins ------------------------
 #define DHTPIN              13
 #define DHTTYPE             DHT22
@@ -24,6 +30,7 @@
 #define SPI_CS_PIN          5
 #define SPI_RESET_PIN       33
 
+<<<<<<< HEAD
 // ------------------------ Location / API -------------------------
 // Replace with your coordinates
 const float LAT = 0;      // TODO: set your latitude
@@ -42,6 +49,8 @@ const char* ntpServer = "pool.ntp.org";
 // GMT standard, BST starts last Sunday in March at 01:00, ends last Sunday in October at 02:00
 const char* tzUK = "GMT0BST,M3.5.0/1,M10.5.0/2";
 
+=======
+>>>>>>> f0e11c5 (Initial commit)
 // ------------------------ Timings ------------------------
 const unsigned long RESYNC_INTERVAL_MS   = 3UL * 3600UL * 1000UL; // 3 hours
 const unsigned long METEO_INTERVAL_MS    = 60UL * 60UL * 1000UL;  // 1 hour
@@ -57,12 +66,18 @@ U8G2_GP1294AI_256X48_F_4W_SW_SPI u8g2(
   U8X8_PIN_NONE, SPI_RESET_PIN
 );
 
+<<<<<<< HEAD
 // Bitmaps
 static const unsigned char image_wifi_connected_bits[] = {
+=======
+// Bitmaps (shared with draw.ino)
+const unsigned char image_wifi_connected_bits[] = {
+>>>>>>> f0e11c5 (Initial commit)
   0x80,0x0f,0x00,0xe0,0x3f,0x00,0x78,0xf0,0x00,0x9c,0xcf,0x01,0xee,0xbf,0x03,0xf7,0x78,0x07,
   0x3a,0xe7,0x02,0xdc,0xdf,0x01,0xe8,0xb8,0x00,0x70,0x77,0x00,0xa0,0x2f,0x00,0xc0,0x1d,0x00,
   0x80,0x0a,0x00,0x00,0x07,0x00,0x00,0x02,0x00,0x00,0x00,0x00
 };
+<<<<<<< HEAD
 static const unsigned char image_humidity_bits[] = {
   0x20,0x00,0x20,0x00,0x30,0x00,0x70,0x00,0x78,0x00,0xf8,0x00,0xfc,0x01,0xfc,0x01,0x7e,0x03,
   0xfe,0x02,0xff,0x06,0xff,0x07,0xfe,0x03,0xfe,0x03,0xfc,0x01,0xf0,0x00
@@ -72,6 +87,17 @@ static const unsigned char image_temperature_bits[] = {
   0x92,0x00,0x39,0x01,0x75,0x01,0x7d,0x01,0x39,0x01,0x82,0x00,0x7c,0x00
 };
 static const unsigned char image_wifi_disconnected_bits[] = {
+=======
+const unsigned char image_humidity_bits[] = {
+  0x20,0x00,0x20,0x00,0x30,0x00,0x70,0x00,0x78,0x00,0xf8,0x00,0xfc,0x01,0xfc,0x01,0x7e,0x03,
+  0xfe,0x02,0xff,0x06,0xff,0x07,0xfe,0x03,0xfe,0x03,0xfc,0x01,0xf0,0x00
+};
+const unsigned char image_temperature_bits[] = {
+  0x38,0x00,0x44,0x00,0xd4,0x00,0x54,0x00,0xd4,0x00,0x54,0x00,0xd4,0x00,0x54,0x00,0x54,0x00,
+  0x92,0x00,0x39,0x01,0x75,0x01,0x7d,0x01,0x39,0x01,0x82,0x00,0x7c,0x00
+};
+const unsigned char image_wifi_disconnected_bits[] = {
+>>>>>>> f0e11c5 (Initial commit)
   0x84,0x0f,0x00,0x68,0x30,0x00,0x10,0xc0,0x00,0xa4,0x0f,0x01,0x42,0x30,0x02,0x91,0x40,0x04,
   0x08,0x85,0x00,0xc4,0x1a,0x01,0x20,0x24,0x00,0x10,0x4a,0x00,0x80,0x15,0x00,0x40,0x20,0x00,
   0x00,0x42,0x00,0x00,0x85,0x00,0x00,0x02,0x01,0x00,0x00,0x00
@@ -92,6 +118,12 @@ float extHum  = NAN;
 // Wi-Fi retry ticker
 unsigned long lastWifiRetry = 0;
 
+<<<<<<< HEAD
+=======
+// Forward declaration (implemented in draw.ino)
+void drawUI(const struct tm& tmNow);
+
+>>>>>>> f0e11c5 (Initial commit)
 // ------------------------ Helpers ------------------------
 bool connectWiFi(unsigned long timeoutMs = 15000) {
   WiFi.mode(WIFI_STA);
@@ -127,7 +159,11 @@ void readDHTReliable() {
   float t = dht.readTemperature();
   float h = dht.readHumidity();
   if (isnan(t) || isnan(h)) {
+<<<<<<< HEAD
     delay(50); // short pause before retry
+=======
+    delay(50);
+>>>>>>> f0e11c5 (Initial commit)
     t = dht.readTemperature();
     h = dht.readHumidity();
   }
@@ -165,7 +201,11 @@ void fetchOpenMeteo() {
                "&current=temperature_2m,relative_humidity_2m&timezone=" + TIMEZONE_API;
 
   WiFiClientSecure client;
+<<<<<<< HEAD
   client.setInsecure();  // NOTE: for production, install the root CA instead
+=======
+  client.setInsecure();
+>>>>>>> f0e11c5 (Initial commit)
 
   HTTPClient http;
   if (!http.begin(client, url)) {
@@ -208,6 +248,7 @@ void fetchOpenMeteo() {
   if (!isnan(h)) extHum  = h;
 
   Serial.printf("Open-Meteo OK: %.1f °C, %.1f %%\n", extTemp, extHum);
+<<<<<<< HEAD
   lastMeteo = millis(); // success -> hourly cadence
 }
 
@@ -297,6 +338,9 @@ void drawUI(const struct tm& tmNow) {
   u8g2.drawStr(137, 8, "External");
 
   u8g2.sendBuffer();
+=======
+  lastMeteo = millis(); // success
+>>>>>>> f0e11c5 (Initial commit)
 }
 
 // ------------------------ Setup ------------------------
