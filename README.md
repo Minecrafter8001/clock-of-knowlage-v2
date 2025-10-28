@@ -32,7 +32,8 @@ front display:
 rear with wiring:
 ![IMG_20251028_153950273](https://github.com/user-attachments/assets/a1a52a12-4fe7-4d9a-bcfd-3b5f73ceea5f)
 v2 on the right with its namesake on the left (not a brand, my patients bought it 20 years ago and named it that)
-![IMG_20251028_153950273](https://github.com/user-attachments/assets/96d70f5b-4079-467f-81e4-6eff04242427)
+![IMG_20251028_153950273](https://github.com/user-attachments/assets/8b8ab0aa-47bf-4978-9017-3b956551e56e)
+
 
 
 
