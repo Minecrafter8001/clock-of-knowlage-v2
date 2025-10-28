@@ -20,3 +20,6 @@ Approximate costs (as of 2025):
 - ESP32 board: 3 for ~£18 [Amazon](https://www.amazon.co.uk/dp/B0D8T5XD3P)
 - VFD display: ~£41 [AliExpress](https://www.aliexpress.com/item/1005004465805347.html)
 - DHT22 sensor: ~£3 [Amazon](https://www.amazon.co.uk/dp/B0DP3XJSXR)
+
+## Issues and bugs
+1. if the wifi accociation fails it waits forever and needs a manual restart
