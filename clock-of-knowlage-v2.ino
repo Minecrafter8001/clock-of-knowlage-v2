@@ -13,12 +13,9 @@
 #include "time.h"
 #include <WiFiClientSecure.h>
 
-<<<<<<< HEAD
-=======
 // User configuration
 #include "config.h"
 
->>>>>>> f0e11c5 (Initial commit)
 // ------------------------ Hardware & Pins ------------------------
 #define DHTPIN              13
 #define DHTTYPE             DHT22
@@ -30,27 +27,6 @@
 #define SPI_CS_PIN          5
 #define SPI_RESET_PIN       33
 
-<<<<<<< HEAD
-// ------------------------ Location / API -------------------------
-// Replace with your coordinates
-const float LAT = 0;      // TODO: set your latitude
-const float LON = 0;      // TODO: set your longitude
-const char* TIMEZONE_API = "Europe/London"; // Timezone string for Open-Meteo
-
-// ------------------------ WiFi & Time ----------------------------
-// WiFi credentials
-const char* ssid     = "SSID-here";       // TODO: set your SSID
-const char* password = "password-here";   // TODO: set your password
-
-// NTP server
-const char* ntpServer = "pool.ntp.org";
-
-// Time zone string for UK with automatic DST (BST)
-// GMT standard, BST starts last Sunday in March at 01:00, ends last Sunday in October at 02:00
-const char* tzUK = "GMT0BST,M3.5.0/1,M10.5.0/2";
-
-=======
->>>>>>> f0e11c5 (Initial commit)
 // ------------------------ Timings ------------------------
 const unsigned long RESYNC_INTERVAL_MS   = 3UL * 3600UL * 1000UL; // 3 hours
 const unsigned long METEO_INTERVAL_MS    = 60UL * 60UL * 1000UL;  // 1 hour
@@ -66,28 +42,12 @@ U8G2_GP1294AI_256X48_F_4W_SW_SPI u8g2(
   U8X8_PIN_NONE, SPI_RESET_PIN
 );
 
-<<<<<<< HEAD
-// Bitmaps
-static const unsigned char image_wifi_connected_bits[] = {
-=======
 // Bitmaps (shared with draw.ino)
 const unsigned char image_wifi_connected_bits[] = {
->>>>>>> f0e11c5 (Initial commit)
   0x80,0x0f,0x00,0xe0,0x3f,0x00,0x78,0xf0,0x00,0x9c,0xcf,0x01,0xee,0xbf,0x03,0xf7,0x78,0x07,
   0x3a,0xe7,0x02,0xdc,0xdf,0x01,0xe8,0xb8,0x00,0x70,0x77,0x00,0xa0,0x2f,0x00,0xc0,0x1d,0x00,
   0x80,0x0a,0x00,0x00,0x07,0x00,0x00,0x02,0x00,0x00,0x00,0x00
 };
-<<<<<<< HEAD
-static const unsigned char image_humidity_bits[] = {
-  0x20,0x00,0x20,0x00,0x30,0x00,0x70,0x00,0x78,0x00,0xf8,0x00,0xfc,0x01,0xfc,0x01,0x7e,0x03,
-  0xfe,0x02,0xff,0x06,0xff,0x07,0xfe,0x03,0xfe,0x03,0xfc,0x01,0xf0,0x00
-};
-static const unsigned char image_temperature_bits[] = {
-  0x38,0x00,0x44,0x00,0xd4,0x00,0x54,0x00,0xd4,0x00,0x54,0x00,0xd4,0x00,0x54,0x00,0x54,0x00,
-  0x92,0x00,0x39,0x01,0x75,0x01,0x7d,0x01,0x39,0x01,0x82,0x00,0x7c,0x00
-};
-static const unsigned char image_wifi_disconnected_bits[] = {
-=======
 const unsigned char image_humidity_bits[] = {
   0x20,0x00,0x20,0x00,0x30,0x00,0x70,0x00,0x78,0x00,0xf8,0x00,0xfc,0x01,0xfc,0x01,0x7e,0x03,
   0xfe,0x02,0xff,0x06,0xff,0x07,0xfe,0x03,0xfe,0x03,0xfc,0x01,0xf0,0x00
@@ -97,7 +57,6 @@ const unsigned char image_temperature_bits[] = {
   0x92,0x00,0x39,0x01,0x75,0x01,0x7d,0x01,0x39,0x01,0x82,0x00,0x7c,0x00
 };
 const unsigned char image_wifi_disconnected_bits[] = {
->>>>>>> f0e11c5 (Initial commit)
   0x84,0x0f,0x00,0x68,0x30,0x00,0x10,0xc0,0x00,0xa4,0x0f,0x01,0x42,0x30,0x02,0x91,0x40,0x04,
   0x08,0x85,0x00,0xc4,0x1a,0x01,0x20,0x24,0x00,0x10,0x4a,0x00,0x80,0x15,0x00,0x40,0x20,0x00,
   0x00,0x42,0x00,0x00,0x85,0x00,0x00,0x02,0x01,0x00,0x00,0x00
@@ -118,12 +77,9 @@ float extHum  = NAN;
 // Wi-Fi retry ticker
 unsigned long lastWifiRetry = 0;
 
-<<<<<<< HEAD
-=======
 // Forward declaration (implemented in draw.ino)
 void drawUI(const struct tm& tmNow);
 
->>>>>>> f0e11c5 (Initial commit)
 // ------------------------ Helpers ------------------------
 bool connectWiFi(unsigned long timeoutMs = 15000) {
   WiFi.mode(WIFI_STA);
@@ -159,11 +115,7 @@ void readDHTReliable() {
   float t = dht.readTemperature();
   float h = dht.readHumidity();
   if (isnan(t) || isnan(h)) {
-<<<<<<< HEAD
-    delay(50); // short pause before retry
-=======
     delay(50);
->>>>>>> f0e11c5 (Initial commit)
     t = dht.readTemperature();
     h = dht.readHumidity();
   }
@@ -201,11 +153,7 @@ void fetchOpenMeteo() {
                "&current=temperature_2m,relative_humidity_2m&timezone=" + TIMEZONE_API;
 
   WiFiClientSecure client;
-<<<<<<< HEAD
-  client.setInsecure();  // NOTE: for production, install the root CA instead
-=======
   client.setInsecure();
->>>>>>> f0e11c5 (Initial commit)
 
   HTTPClient http;
   if (!http.begin(client, url)) {
@@ -248,99 +196,7 @@ void fetchOpenMeteo() {
   if (!isnan(h)) extHum  = h;
 
   Serial.printf("Open-Meteo OK: %.1f °C, %.1f %%\n", extTemp, extHum);
-<<<<<<< HEAD
-  lastMeteo = millis(); // success -> hourly cadence
-}
-
-// ------------------------ Drawing ------------------------
-void drawUI(const struct tm& tmNow) {
-  char timeHHMMSS[9];
-  snprintf(timeHHMMSS, sizeof(timeHHMMSS), "%02d:%02d:%02d",
-           (tmNow.tm_hour % 12 == 0) ? 12 : tmNow.tm_hour % 12,
-           tmNow.tm_min, tmNow.tm_sec);
-
-  const char* ampm = (tmNow.tm_hour < 12) ? "AM" : "PM";
-
-  char dayOfMonth[3];
-  snprintf(dayOfMonth, sizeof(dayOfMonth), "%02d", tmNow.tm_mday);
-
-  char monthDay[10]; // e.g. "05 TUE"
-  snprintf(monthDay, sizeof(monthDay), "%02d %s", tmNow.tm_mon + 1, dow3(tmNow.tm_wday));
-
-  const char* tzText = (tmNow.tm_isdst > 0) ? "BST" : "GMT";
-
-  char tMain[8], hMain[8], tExt[8], hExt[8];
-  formatEnv(tMain, sizeof(tMain), hMain, sizeof(hMain), cachedTemp, cachedHum);
-  formatEnv(tExt,  sizeof(tExt),  hExt,  sizeof(hExt),  extTemp,   extHum);
-
-  // ----- Render -----
-  u8g2.clearBuffer();
-  u8g2.setFontMode(1);
-  u8g2.setBitmapMode(1);
-
-  // Top bars / panels
-  u8g2.drawBox(187, 2, 45, 15);
-  u8g2.drawBox(5, 28, 19, 18);
-  u8g2.drawLine(5, 27, 5, 46);
-  u8g2.drawFrame(187, 17, 45, 30);
-  u8g2.drawBox(233, 28, 22, 17);
-  u8g2.drawFrame(5, 27, 115, 20);
-
-  u8g2.setDrawColor(2);
-
-  u8g2.setFont(u8g2_font_timR24_tr);
-  u8g2.drawStr(4, 25, timeHHMMSS);
-
-  u8g2.setFont(u8g2_font_t0_15b_tr);
-  u8g2.drawStr(7, 42, ampm);
-
-  u8g2.setDrawColor(1);
-
-  // Local env
-  u8g2.setFont(u8g2_font_t0_14b_tr);
-  u8g2.drawStr(35, 45, tMain);
-  u8g2.drawXBM(25, 29, 9, 16, image_temperature_bits);
-  u8g2.drawXBM(72, 29, 11, 16, image_humidity_bits);
-  u8g2.drawStr(83, 45, hMain);
-
-  // Wi-Fi indicator
-  if (WiFi.status() == WL_CONNECTED) {
-    u8g2.drawXBM(234, 3, 19, 16, image_wifi_connected_bits);
-  } else {
-    u8g2.drawXBM(234, 3, 19, 16, image_wifi_disconnected_bits);
-  }
-
-  // Date
-  u8g2.setFont(u8g2_font_profont29_tr);
-  u8g2.drawStr(194, 42, dayOfMonth);
-
-  u8g2.setDrawColor(2);
-  u8g2.setFont(u8g2_font_t0_14b_tr);
-  u8g2.drawStr(188, 14, monthDay);
-
-  u8g2.setFont(u8g2_font_t0_12b_tr);
-  u8g2.drawStr(235, 41, tzText);
-
-  // External (Open-Meteo)
-  u8g2.setDrawColor(1);
-  u8g2.setFont(u8g2_font_t0_14b_tr);
-  u8g2.drawStr(142, 24, tExt);
-  u8g2.drawXBM(128, 10, 9, 16, image_temperature_bits);
-  u8g2.drawXBM(127, 29, 11, 16, image_humidity_bits);
-  u8g2.drawStr(142, 43, hExt);
-
-  u8g2.drawFrame(126, 8, 53, 39);
-  u8g2.drawLine(126, 27, 178, 27);
-
-  u8g2.drawBox(126, 2, 53, 6);
-  u8g2.setDrawColor(2);
-  u8g2.setFont(u8g2_font_4x6_tr);
-  u8g2.drawStr(137, 8, "External");
-
-  u8g2.sendBuffer();
-=======
   lastMeteo = millis(); // success
->>>>>>> f0e11c5 (Initial commit)
 }
 
 // ------------------------ Setup ------------------------

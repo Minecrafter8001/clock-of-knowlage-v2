@@ -1,0 +1,27 @@
+{
+  "configurations": [
+    {
+      "name": "ESP32",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "${workspaceFolder}/../libraries/**",
+
+        // ESP32 core + variants
+        "${env:LOCALAPPDATA}/Arduino15/packages/esp32/hardware/esp32/3.3.2/cores/esp32",
+        "${env:LOCALAPPDATA}/Arduino15/packages/esp32/hardware/esp32/3.3.2/variants/esp32",
+
+        // ESP32 built-in libraries
+        "${env:LOCALAPPDATA}/Arduino15/packages/esp32/hardware/esp32/3.3.2/libraries/**"
+      ],
+      "defines": [
+        "ARDUINO=10819",
+        "ARDUINO_ARCH_ESP32"
+      ],
+      "compilerPath": "${env:LOCALAPPDATA}/Arduino15/packages/esp32/tools/esp-x32/2507/bin/xtensa-esp32-elf-gcc.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "intelliSenseMode": "gcc-x64"
+    }
+  ],
+  "version": 4
+}
