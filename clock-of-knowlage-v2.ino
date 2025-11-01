@@ -62,7 +62,7 @@ const unsigned char image_wifi_disconnected_bits[] = {
   0x00,0x42,0x00,0x00,0x85,0x00,0x00,0x02,0x01,0x00,0x00,0x00
 };
 
-// State
+// ------------------------ State ------------------------
 unsigned long lastDHT = 0;
 float cachedTemp = NAN, cachedHum = NAN;
 
@@ -77,32 +77,14 @@ float extHum  = NAN;
 // Wi-Fi retry ticker
 unsigned long lastWifiRetry = 0;
 
-// Forward declaration (implemented in draw.ino)
+// Time management
+bool timeSynced = false;
+unsigned long bootMillis = 0;
+
+// Forward declaration
 void drawUI(const struct tm& tmNow);
 
 // ------------------------ Helpers ------------------------
-bool connectWiFi(unsigned long timeoutMs = 15000) {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(ssid, password);
-
-  Serial.printf("Connecting to %s", ssid);
-  unsigned long start = millis();
-  while (WiFi.status() != WL_CONNECTED && millis() - start < timeoutMs) {
-    delay(500);
-    Serial.print(".");
-  }
-
-  if (WiFi.status() == WL_CONNECTED) {
-    Serial.printf("\nWiFi connected. IP: %s\n", WiFi.localIP().toString().c_str());
-    return true;
-  } else {
-    Serial.println("\nWiFi connect failed (timeout).");
-    WiFi.disconnect(true);   // reset state
-    delay(2000);             // small backoff
-    return false;
-  }
-}
-
 bool syncTime() {
   configTzTime(tzUK, ntpServer); // automatic DST
   struct tm timeinfo;
@@ -123,23 +105,6 @@ void readDHTReliable() {
     cachedTemp = t;
     cachedHum  = h;
   }
-}
-
-void formatEnv(char* tempBuf, size_t tempLen, char* humBuf, size_t humLen, float t, float h) {
-  if (!isnan(t)) snprintf(tempBuf, tempLen, "%.1fC", t);
-  else strncpy(tempBuf, "--.-C", tempLen);
-
-  if (!isnan(h)) snprintf(humBuf, humLen, "%.1f%%", h);
-  else strncpy(humBuf, "--.-%", humLen);
-
-  tempBuf[tempLen - 1] = 0;
-  humBuf[humLen - 1] = 0;
-}
-
-const char* dow3(uint8_t wday) {
-  static const char* days[] = {"SUN","MON","TUE","WED","THU","FRI","SAT"};
-  if (wday > 6) return "---";
-  return days[wday];
 }
 
 void fetchOpenMeteo() {
@@ -181,7 +146,6 @@ void fetchOpenMeteo() {
 
   if (err) {
     Serial.printf("JSON error: %s\n", err.c_str());
-    Serial.printf("Body (first 200): %s\n", body.substring(0, 200).c_str());
     http.end();
     lastMeteo = millis() - METEO_INTERVAL_MS + METEO_RETRY_MS;
     return;
@@ -213,46 +177,70 @@ void setup() {
   dht.begin();
   u8g2.begin();
 
-  connectWiFi();
-  syncTime();
-  lastResync = millis();
+  // Start internal fallback timer
+  bootMillis = millis();
+  Serial.println("Starting display with internal timer...");
+
+  // Start Wi-Fi in background
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  lastWifiRetry = millis();
 
   readDHTReliable();
-  lastMeteo = millis() - METEO_INTERVAL_MS; // trigger fetch immediately
+  lastMeteo = millis() - METEO_INTERVAL_MS; // trigger fetch once connected
 }
 
 // ------------------------ Loop ------------------------
 void loop() {
-  if (millis() - lastResync > RESYNC_INTERVAL_MS) {
-    syncTime();
-    lastResync = millis();
-  }
-
+  // Wi-Fi connection handling (non-blocking)
   if (WiFi.status() != WL_CONNECTED) {
     if (millis() - lastWifiRetry > WIFI_RETRY_MS) {
-      Serial.println("WiFi lost, reconnecting...");
-      connectWiFi();
+      Serial.println("Attempting Wi-Fi connection...");
+      WiFi.disconnect(true);
+      WiFi.begin(ssid, password);
       lastWifiRetry = millis();
+    }
+  } else {
+    // Connected
+    if (!timeSynced) {
+      if (syncTime()) {
+        timeSynced = true;
+        lastResync = millis();
+        Serial.println("Initial time sync complete.");
+      }
+    }
+
+    if (timeSynced && millis() - lastResync > RESYNC_INTERVAL_MS) {
+      syncTime();
+      lastResync = millis();
+    }
+
+    if (timeSynced && millis() - lastMeteo > METEO_INTERVAL_MS) {
+      fetchOpenMeteo();
     }
   }
 
-  if (millis() - lastMeteo > METEO_INTERVAL_MS) {
-    fetchOpenMeteo();
-  }
-
-  struct tm timeinfo;
-  if (!getLocalTime(&timeinfo)) {
-    Serial.println("Failed to obtain time");
-    delay(250);
-    return;
-  }
-
+  // Read sensors
   unsigned long nowMillis = millis();
   if (nowMillis - lastDHT > 2000) {
     lastDHT = nowMillis;
     readDHTReliable();
   }
 
+  // Time display
+  struct tm timeinfo = {};
+  if (timeSynced && getLocalTime(&timeinfo)) {
+    // use real time
+  } else {
+    // use simulated uptime-based clock
+    unsigned long elapsed = millis() - bootMillis;
+    unsigned long seconds = elapsed / 1000;
+    timeinfo.tm_hour = (seconds / 3600) % 24;
+    timeinfo.tm_min  = (seconds / 60) % 60;
+    timeinfo.tm_sec  = seconds % 60;
+  }
+
+  // Update display every second
   if (timeinfo.tm_sec != lastSecond) {
     lastSecond = timeinfo.tm_sec;
     drawUI(timeinfo);
